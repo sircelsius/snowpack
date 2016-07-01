@@ -1,0 +1,7 @@
+{
+  "esversion": 6,
+  "globals": {
+    "__dirname": true,
+    "module": true
+  }
+}

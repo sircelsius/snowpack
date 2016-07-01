@@ -1,0 +1,11 @@
+{
+  "source": {
+    "include": "src/lib/index.js"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ],
+  "opts": {
+    "destination": "./build/documentation/"
+  }
+}

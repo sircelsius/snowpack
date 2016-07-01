@@ -1,0 +1,20 @@
+web:
+  build: .
+  ports:
+  - "8080:3000"
+  volumes:
+  - .:/usr/src/app/:rw
+  environment:
+  - NODE_ENV=dev
+  - PORT=3000
+  command: >
+    sh -c '
+      if test -d node_modules;
+      then
+        echo node_modules_exists
+      else
+        cp -a /tmp/node_modules /usr/src/app/website;
+      fi &&
+      npm install &&
+      npm run devserver
+    '
