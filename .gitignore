@@ -53,3 +53,6 @@ screen
 
 # Secure folder
 src/lib/secure
+
+# pages folder
+gh-pages
