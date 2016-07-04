@@ -26,7 +26,7 @@
 <p><a href="http://webpack.github.io/">Webpack</a> your <a href="http://snowplowanalytics.com/">Snowplow</a> JS tracking.</p>
 </blockquote>
 
-<p>While the official snowplow documentation <a href="https://github.com/snowplow/snowplow/wiki/Integrating-javascript-tags-with-Google-Tag-Manager">recommends setting up their JS tracker via Google Tag Manager</a>, if you have tons of tags and dependencies on your website this will significantly increase the delay between the moment when our user lands on one of your pages and the moment when events are sent.</p>
+<p>While the official snowplow documentation <a href="https://github.com/snowplow/snowplow/wiki/Integrating-javascript-tags-with-Google-Tag-Manager">recommends setting up their JS tracker via Google Tag Manager</a>, if you have tons of tags and dependencies on your website this will significantly increase the delay between the moment when a user lands on one of your pages and the moment when events are sent.</p>
 
 <p>There are workarounds to this (such as <a href="https://github.com/snowplow/snowplow/wiki/1-General-parameters-for-the-Javascript-tracker#2213-configuring-localstorage">using <code>localStorage</code> to store events that haven't been sent</a>), but tackling the issue at its root may be a good idea.</p>
 
