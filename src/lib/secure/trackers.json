@@ -1,0 +1,16 @@
+[
+  {
+    "trackerName": "ramsay",
+    "collectorHostname": "greatsnowplowcollector.com",
+    "options": {
+      "appId": "test-ramsay",
+      "encodeBase64": true,
+      "cookieDomainRemove": "ramsay",
+      "contexts": {
+        "optimizelyStates": true,
+        "webPage": true,
+        "performanceTiming": true
+      }
+    }
+  }
+]

@@ -10,9 +10,6 @@ window.makeItSnow = () => {
   return loader()
     .then((snowplow) => {
       return createTrackers(trackers, snowplow);
-    })
-    .then((s) => {
-      return s;
     });
 };
 

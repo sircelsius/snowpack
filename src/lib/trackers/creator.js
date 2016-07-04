@@ -19,6 +19,10 @@ export default (trackers, snowplow) => {
       });
     }));
   }
-
-  return Promise.all(promises);
+  return Promise.all(promises)
+    .then(() => {
+      return new Promise((resolve) => {
+        resolve(snowplow);
+      })
+    });
 };
