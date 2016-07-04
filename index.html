@@ -1,102 +1,102 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title>Snowpack by sircelsius</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-  </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">Snowpack</h1>
-      <h2 class="project-tagline">Webpack your snowplow</h2>
-      <a href="https://github.com/sircelsius/snowpack" class="btn">View on GitHub</a>
-      <a href="https://github.com/sircelsius/snowpack/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/sircelsius/snowpack/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+  <div class="row">
+    <div class="page-header">
+      <h1>Snowpack</h1>
+      <p>Webpack your snowplow</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <div class="alert" id="direct-container">
+        It took <span id="direct"></span> ms to setup the trackers and send a pageview directly.
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+      <div class="alert" id="gtm-container">
+        It took <span id="gtm"></span> ms to setup the trackers and send a pageview from GTM.
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>So what is this exactly?</h2>
+      <p>Snowpack tries to send your Snowplow events as fast as possible.</p>
+      <p>One of the recommended approaches of Snowplow is to use Google Tag Manager to import the JS tracker, create your trackers and track pageviews.</p>
+      <p>The issue of this is that as your website scales, chances are that you will have tons of tags triggered in GTM, they may take quite some time to execute, and before you know it, your pageview events are sent 9s after the page load</p>
+      <p>By then a lot of your users will be gone.</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>So how does this work then?</h2>
+      <p>Snowpack is a very small script (<code>10kB</code>) that you can afford to include at the very top of your page.</p>
+      <p>It will initialize your trackers and you can start sending events ASAP.</p>
+    </div>
+  </div>
+</div>
 
-    <section class="main-content">
-      <h1>
-<a id="snowpack" class="anchor" href="#snowpack" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Snowpack</h1>
+<script src="bundle.js" async="1"></script>
+<script>
+  function windsOfWinter() {
+    window.makeItSnow()
+      .then(function(s) {
+        s('trackPageView');
+        var time = Date.now() - window.performance.timing.domLoading;
+        $('#direct').html(time);
+        $('#direct-container').attr('data-speed', time);
+        setBestResult();
+        console.log('Pageview was sent after ' + time + 'ms.');
+      });
+  }
 
-<blockquote>
-<p><a href="http://webpack.github.io/">Webpack</a> your <a href="http://snowplowanalytics.com/">Snowplow</a> JS tracking.</p>
-</blockquote>
+  // load the script with async="1" and you need to wait for window.makeItSnow to be defined
+  if(window.makeItSnow) {
+    windsOfWinter();
+  } else {
+    window.addEventListener('winterIsComing', windsOfWinter);
+  }
 
-<p>While the official snowplow documentation <a href="https://github.com/snowplow/snowplow/wiki/Integrating-javascript-tags-with-Google-Tag-Manager">recommends setting up their JS tracker via Google Tag Manager</a>, if you have tons of tags and dependencies on your website this will significantly increase the delay between the moment when a user lands on one of your pages and the moment when events are sent.</p>
+  window.addEventListener('winterHasArrived', function() {
+    var time = Date.now() - window.performance.timing.domLoading;
+    $('#gtm').html(time);
+    $('#gtm-container').attr('data-speed', time);
+    setBestResult();
+    console.log('GTM pageview was sent after ' + time + 'ms.');
+  });
 
-<p>There are workarounds to this (such as <a href="https://github.com/snowplow/snowplow/wiki/1-General-parameters-for-the-Javascript-tracker#2213-configuring-localstorage">using <code>localStorage</code> to store events that haven't been sent</a>), but tackling the issue at its root may be a good idea.</p>
-
-<p>Snowpack tries to answer this problem by providing an efficient way of integrating a small (around 10 kB with one tracker setup) script to your pages that will instanciate trackers as fast as possible.</p>
-
-<p>It also includes some goodies such as:</p>
-
-<ul>
-<li>ES6 <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a> objects so you can get the magic going (yes, they are polyfilled).</li>
-<li>Minified, Uglified script once built so you don't overuse your user's bandwidth.</li>
-<li>Cool names: admit it, writing <code>window.addEventListener('winterIsComing', /* tracking stuff */);</code> is fun.</li>
-</ul>
-
-<p>Right now, you can only define trackers with Snowpack, but one day you will be able to do things like (contributions welcome):</p>
-
-<ul>
-<li>Track simple events (pageview, structured events) with contexts.</li>
-<li>Even more ES6 goodness: <code>window.makeItSnow().then((snow) =&gt; { snow.trackPageView( /* */ )}).catch((ice) =&gt; { console.warn(ice) })</code> looks good, right?</li>
-</ul>
-
-<h2>
-<a id="prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Prerequisites</h2>
-
-<p>Create the <code>src/lib/secure/trackers.json</code> file. Add your tracker definition like the following:</p>
-
-<div class="highlight highlight-source-json"><pre>[
-  {
-    <span class="pl-s"><span class="pl-pds">"</span>trackerName<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>greatTracker<span class="pl-pds">"</span></span>,
-    <span class="pl-s"><span class="pl-pds">"</span>collectorHostname<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>my.collector.com<span class="pl-pds">"</span></span>,
-    <span class="pl-s"><span class="pl-pds">"</span>options<span class="pl-pds">"</span></span>: {
-      <span class="pl-s"><span class="pl-pds">"</span>appId<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>myApp<span class="pl-pds">"</span></span>,
-      <span class="pl-s"><span class="pl-pds">"</span>encodeBase64<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>,
-      <span class="pl-s"><span class="pl-pds">"</span>cookieDomainRemove<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>stringToRemovefromHostname<span class="pl-pds">"</span></span>,
-      <span class="pl-s"><span class="pl-pds">"</span>contexts<span class="pl-pds">"</span></span>: {
-        <span class="pl-s"><span class="pl-pds">"</span>optimizelyStates<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>,
-        <span class="pl-s"><span class="pl-pds">"</span>webPage<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>,
-        <span class="pl-s"><span class="pl-pds">"</span>performanceTiming<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>
+  function setBestResult() {
+    var directTimer = $('#direct-container').attr('data-speed');
+    var gtmTimer = $('#gtm-container').attr('data-speed');
+    if(directTimer && gtmTimer) {
+      if(directTimer < gtmTimer) {
+        $('#direct-container').addClass('alert-success');
+        $('#gtm-container').addClass('alert-info');
+      } else {
+        $('#gtm-container').addClass('alert-success');
+        $('#direct-container').addClass('alert-info');
       }
     }
   }
-]
-</pre></div>
+</script>
 
-<ul>
-<li>If you omit <code>options.appId</code>, it will be set to your domain, stripped from any <code>www.</code> and with <code>.</code> changed to <code>-</code> (eg. <code>www.google.com</code> will become <code>google-com</code>).</li>
-<li>You can either specify a <code>cookieDomain</code> option or not. If you omit it, it will be set to the hostname without <code>www.</code>. You can also specify a <code>cookieDomainRemove</code> string that will be removed from the hostname (eg. <code>finance.google.com</code> will become <code>google.com</code> if you set this option to <code>finance.</code>).</li>
-</ul>
-
-<h2>
-<a id="run-devserver" class="anchor" href="#run-devserver" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Run devserver</h2>
-
-<p><code>docker-compose up</code></p>
-
-<p>Open <code>&lt;your-docker-ip&gt;:8080</code>.</p>
-
-<p>Open up <a href="src/index.html"><code>src/index.html</code></a> to understand what's happening.</p>
-
-<h2>
-<a id="build" class="anchor" href="#build" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Build</h2>
-
-<p><code>./scripts/build.sh</code></p>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/sircelsius/snowpack">Snowpack</a> is maintained by <a href="https://github.com/sircelsius">sircelsius</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
-
-    </section>
-
-  
-  </body>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P8DZZN"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-P8DZZN');</script>
+<!-- End Google Tag Manager -->
+</body>
 </html>
