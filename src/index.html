@@ -25,6 +25,22 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>So what is this exactly?</h2>
+      <p>Snowpack tries to send your Snowplow events as fast as possible.</p>
+      <p>One of the recommended approaches of Snowplow is to use Google Tag Manager to import the JS tracker, create your trackers and track pageviews.</p>
+      <p>The issue of this is that as your website scales, chances are that you will have tons of tags triggered in GTM, they may take quite some time to execute, and before you know it, your pageview events are sent 9s after the page load</p>
+      <p>By then a lot of your users will be gone.</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>So how does this work then?</h2>
+      <p>Snowpack is a very small script (<code>10kB</code>) that you can afford to include at the very top of your page.</p>
+      <p>It will initialize your trackers and you can start sending events ASAP.</p>
+    </div>
+  </div>
 </div>
 
 <script src="bundle.js" async="1"></script>
@@ -36,7 +52,7 @@
         var time = Date.now() - window.performance.timing.domLoading;
         $('#direct').html(time);
         $('#direct-container').attr('data-speed', time);
-        setGreen();
+        setBestResult();
         console.log('Pageview was sent after ' + time + 'ms.');
       });
   }
@@ -52,11 +68,11 @@
     var time = Date.now() - window.performance.timing.domLoading;
     $('#gtm').html(time);
     $('#gtm-container').attr('data-speed', time);
-    setGreen();
+    setBestResult();
     console.log('GTM pageview was sent after ' + time + 'ms.');
   });
 
-  function setGreen() {
+  function setBestResult() {
     var directTimer = $('#direct-container').attr('data-speed');
     var gtmTimer = $('#gtm-container').attr('data-speed');
     if(directTimer && gtmTimer) {
