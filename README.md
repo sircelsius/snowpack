@@ -1,4 +1,4 @@
-# Snowpack
+# Snowpack [![Build Status](https://travis-ci.org/sircelsius/snowpack.svg?branch=master)](https://travis-ci.org/sircelsius/snowpack)
 
 > [Webpack](http://webpack.github.io/) your [Snowplow](http://snowplowanalytics.com/) JS tracking.
 
