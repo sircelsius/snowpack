@@ -6,4 +6,4 @@ services:
   - docker
 
 script:
-  - ./scripts/build.sh
+  - docker-compose run test

@@ -18,3 +18,17 @@ web:
       npm install &&
       npm run devserver
     '
+test:
+  build: .
+  volumes:
+  - .:/usr/src/app/:rw
+  command: >
+    sh -c '
+      if test -d node_modules;
+      then
+        echo node_modules_exists
+      else
+        cp -a /tmp/node_modules /usr/src/app/website;
+      fi &&
+      npm test
+    '
