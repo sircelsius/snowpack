@@ -30,5 +30,6 @@ test:
       else
         cp -a /tmp/node_modules /usr/src/app/website;
       fi &&
+      npm install &&
       npm test
     '
